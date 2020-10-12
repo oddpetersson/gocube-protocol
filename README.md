@@ -49,7 +49,68 @@ This section describes the format of the notification characteristic value.
 | 0x09 | ? |
 | 0x0A | MsgCubeInfo |
 
+## Message Type 0x01: MsgRotatingSide
+**Message Length:** 2 bytes
+
+| Byte Offset | Length (Bytes) | Format  | Name          | Description |
+| ----------- | -------------- | ------- | ------------- | ----------- |
+| 0           | 1              | Uint8   | FaceRotation  | Face and rotation |
+| 1           | 1              | Uint8   | Orientation   | Center piece orientation |
+
+| FaceRotation | Binary Value  | Color   | Rotation |
+| ------------ | ------------  | -----   | -------- |
+| 0x00         | ``0000 0000`` | Blue    | Clockwise |
+| 0x01         | ``0000 0001`` | Blue    | Counterclockwise |
+| 0x02         | ``0000 0010`` | Green   | Clockwise |
+| 0x03         | ``0000 0011`` | Green   | Counterclockwise |
+| 0x04         | ``0000 0100`` | White   | Clockwise |
+| 0x05         | ``0000 0101`` | White   | Counterclockwise |
+| 0x06         | ``0000 0110`` | Yellow  | Clockwise |
+| 0x07         | ``0000 0111`` | Yellow  | Counterclockwise |
+| 0x08         | ``0000 1000`` | Red     | Clockwise |
+| 0x09         | ``0000 1001`` | Red     | Counterclockwise |
+| 0x0A         | ``0000 1010`` | Orange  | Clockwise |
+| 0x0B         | ``0000 1011`` | Orange  | Counterclockwise |
+
+| Orientation | Description |
+| ----------- | ----------- |
+| 0x00        | Twelve o'clock |
+| 0x03        | Three o'clock |
+| 0x06        | Six o'clock |
+| 0x09        | Nine o'clock |
+
+> **Example:**
+> Prerequisite: Yellow side facing up, green side facing you
+>
+> | Notation | FaceRotation | Orientation | Description |
+> | -------- | ------------ | ----------- | ----------- |
+> | F        | 0x02         | 0x09        | Green face clockwise rotation, center piece orientation nine o'clock |
+> | R        | 0x0A         | 0x00        | Orange face clockwise rotation, center piece orientation twelve o'clock |
+> | U        | 0x06         | 0x09        | Yellow face clockwise rotation, center piece orientation nine o'clock |
+> | L        | 0x08         | 0x00        | Red face clockwise rotation, center piece orientation twelve o'clock |
+> | B        | 0x00         | 0x06        | Blue face clockwise rotation, center piece orientation six o'clock |
+> | D        | 0x04         | 0x00        | Yellow face clockwise rotation, center piece orientation twelve o'clock |
+> | F'       | 0x03         | 0x06        | Green face counterclockwise rotation, center piece orientation six o'clock |
+> | R'       | 0x0B         | 0x09        | Orange face counterclockwise rotation, center piece orientation nine o'clock |
+> | U'       | 0x07         | 0x06        | Yellow face counterclockwise rotation, center piece orientation six o'clock |
+> | L'       | 0x09         | 0x09        | Red face counterclockwise rotation, center piece orientation nine o'clock |
+> | B'       | 0x01         | 0x03        | Blue face counterclockwise rotation, center piece orientation three o'clock |
+> | D'       | 0x05         | 0x09        | Yellow face counterclockwise rotation, center piece orientation nine o'clock |
+
 ## Message Type 0x05: MsgBatteryLevel
+**Message Length:** 1 byte
+
 | Byte Offset | Length (Bytes) | Format  | Name         | Description |
 | ----------- | -------------- | ------- | ------------ | ----------- |
-| 0           | 1              | Uint8   | BatteryLevel | <p>Current battery level percentage.<br>Range: 0x00 - 0x64 (0 - 100)</p> |
+| 0           | 1              | Uint8   | BatteryLevel | <p>Current battery level percentage<br>Range: 0x00 - 0x64 (0 - 100)</p> |
+
+> **Example:**
+> | Byte Offset | Value | Description |
+> | ----------- | ----- | ----------- |
+> | 0           | 0x2A  | Prefix: asterisk (*) |
+> | 1           | 0x05  | Length: 5 bytes |
+> | 2           | 0x05  | Message Type: MsgBatteryLevel |
+> | 3           | 0x38  | Message: Battery level: 56% |
+> | 4           | 0x6C  | Checksum: (0x2A + 0x05 + 0x05 + 0x38) % 256 |
+> | 5           | 0x0D  | Suffix: CR |
+> | 6           | 0x0A  | Suffix: LF |
