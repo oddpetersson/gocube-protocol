@@ -80,6 +80,7 @@ This section describes the format of the notification characteristic value.
 | 0x09        | Nine o'clock |
 
 > **Example:**
+>
 > Prerequisite: Yellow side facing up, green side facing you
 >
 > | Notation | FaceRotation | Orientation | Description |
