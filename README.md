@@ -6,10 +6,46 @@ This document describes the general format of the notifications sent from the cu
 **TODO:**
 - Figure out how to turn on the backlight of the cube
 
-# GATT Service
-| Service             | UUID |
-| ------------------- | ---- |
-| Nordic UART Service | 6e400003-b5a3-f393-e0a9-e50e24dcca9e |
+# GATT Services
+| Service             | Properties | UUID |
+| ------------------- | ---------- | ---- |
+| Primary Service     |            | 6e400001-b5a3-f393-e0a9-e50e24dcca9e |
+| RX Characterstic    | W, WNR     | 6e400002-b5a3-f393-e0a9-e50e24dcca9e |
+| TX Characterstic    | N          | 6e400003-b5a3-f393-e0a9-e50e24dcca9e |
+
+# Commands
+This section lists the requests supported by the RX Characterstic service.
+
+## Messages
+Enable notifications for the TX Characterstics service to receive messages.
+
+By default, the cube will send 15 MsgRotation notifications per second. Use the following commands to enable or disable these messages:
+
+| Value | Command         |
+| ----- | --------------- |
+| 0x37  | DisableRotation |
+| 0x38  | EnableRotation  |
+
+Use the following commands to request additional information from the cube:
+
+| Value | Command         | Message Type |
+| ----- | --------------- | -----------  |
+| 0x32  | GetBattery      | MsgBattery   |
+| 0x33  | GetState        | MsgState     |
+| 0x35  | GetState        | MsgState     |
+| 0x39  | GetStats        | MsgStats     |
+| 0x56  | GetCubeType     | MsgCubeType  |
+
+## Configuration
+
+| Value | Command            | Description |
+| ----- | ------------------ | ----------- |
+| 0x34  | Reboot             | Reboot the cube |
+| 0x41  | LedFlash           | Flash the lights three times |
+| 0x42  | LedToogleAnimation | Enable or disable animated lights |
+| 0x43  | LedFlashSlow       | Slowly flashes the lights three times |
+| 0x44  | LedToggle          | Toggle lights |
+| 0x57  | CalibrateRotation  | |
 
 # Notifications
 This section describes the format of the notification characteristic value.
@@ -29,7 +65,7 @@ This section describes the format of the notification characteristic value.
 > | ----------- | ----- | ----------- |
 > | 0           | 0x2A  | Prefix: asterisk (*) |
 > | 1           | 0x05  | Length: 5 bytes |
-> | 2           | 0x05  | Message Type: MsgBatteryLevel |
+> | 2           | 0x05  | Message Type: MsgBattery |
 > | 3           | 0x38  | Message: Battery level: 56% |
 > | 4           | 0x6C  | Checksum: (0x2A + 0x05 + 0x05 + 0x38) % 256 |
 > | 5           | 0x0D  | Suffix: CR |
@@ -38,18 +74,14 @@ This section describes the format of the notification characteristic value.
 ## Message Types
 | Type | Name |
 | ---- | ---- |
-| 0x01 | MsgRotatingSide |
-| 0x02 | MsgCubeColorAndDirectionState |
-| 0x03 | MsgQuaternion |
-| 0x04 | MsgQuaternionShort |
-| 0x05 | MsgBatteryLevel |
-| 0x06 | ? |
+| 0x01 | MsgRotation |
+| 0x02 | MsgState |
+| 0x03 | MsgOrientation |
+| 0x05 | MsgBattery |
 | 0x07 | MsgOffLineStats |
-| 0x08 | MsgIsEdgeCube |
-| 0x09 | ? |
-| 0x0A | MsgCubeInfo |
+| 0x08 | MsgCubeType |
 
-## Message Type 0x01: MsgRotatingSide
+## Message Type 0x01: MsgRotation
 **Message Length:** 2 bytes
 
 | Byte Offset | Length (Bytes) | Format  | Name          | Description |
@@ -98,7 +130,7 @@ This section describes the format of the notification characteristic value.
 > | B'       | 0x01         | 0x03        | Blue face counterclockwise rotation, center piece orientation three o'clock |
 > | D'       | 0x05         | 0x09        | Yellow face counterclockwise rotation, center piece orientation nine o'clock |
 
-## Message Type 0x05: MsgBatteryLevel
+## Message Type 0x05: MsgBattery
 **Message Length:** 1 byte
 
 | Byte Offset | Length (Bytes) | Format  | Name         | Description |
@@ -110,7 +142,7 @@ This section describes the format of the notification characteristic value.
 > | ----------- | ----- | ----------- |
 > | 0           | 0x2A  | Prefix: asterisk (*) |
 > | 1           | 0x05  | Length: 5 bytes |
-> | 2           | 0x05  | Message Type: MsgBatteryLevel |
+> | 2           | 0x05  | Message Type: MsgBattery |
 > | 3           | 0x38  | Message: Battery level: 56% |
 > | 4           | 0x6C  | Checksum: (0x2A + 0x05 + 0x05 + 0x38) % 256 |
 > | 5           | 0x0D  | Suffix: CR |
