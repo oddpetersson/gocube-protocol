@@ -236,7 +236,7 @@ Message offset map:
   </tbody>
 </table>
 
-** Example message, hex values:**
+**Example message, hex values:**
 
 | BlueCenter + BlueFace      | GreenCenter + GreenFace    | WhiteCenter + WhiteFace    | YellowCenter + YellowFace  | RedCenter + RedFace        | OrangeCenter + OrangeFace  | Orientation       |
 | -------------------------- | -------------------------- | -------------------------- | -------------------------- | -------------------------- | -------------------------- | ----------------- |
@@ -274,7 +274,7 @@ Message offset map:
     <tr>
       <td>B</td><td>G</td><td>R</td>
       <td>W</td><td>R</td><td>B</td>
-      <td>R</td><td>B</td><td>R</td>
+      <td>O</td><td>B</td><td>R</td>
       <td>B</td><td>O</td><td>Y</td>
     </tr>
     <tr>
