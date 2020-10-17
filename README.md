@@ -177,7 +177,7 @@ Message offset map:
 <table>
   <tbody>
     <tr>
-      <td colspan="3></td><td colspan="3">White Face</td><td colspan="6"></td>
+      <td colspan="3"></td><td colspan="3">White Face</td><td colspan="6"></td>
     </tr>
     <tr>
       <td colspan="3"></td>
@@ -195,7 +195,9 @@ Message offset map:
       <td colspan="6"></td>
     </tr>
     <tr>
-      <td colspan="3>Green Face</td><td colspan="3">Red Face</td><td colspan="3">Blue Face</td><td colspan="3">Orange Face</td>
+      <td colspan="3">Green Face</td><td colspan="3">Red Face</td><td colspan="3">Blue Face</td><td colspan="3">Orange Face</td>
+    </tr>
+    <tr>
       <td>10</td><td>11</td><td>12</td>
       <td>37</td><td>38</td><td>39</td>
       <td>1</td><td>2</td><td>3</td>
@@ -214,7 +216,9 @@ Message offset map:
       <td>52</td><td>51</td><td>50</td>
     </tr>
     <tr>
-      <td colspan="3></td><td colspan="3">Yellow Face</td><td colspan="6"></td>
+      <td colspan="3"></td><td colspan="3">Yellow Face</td><td colspan="6"></td>
+    </tr>
+    <tr>
       <td colspan="3"></td>
       <td>28</td><td>29</td><td>30</td>
       <td colspan="6"></td>
@@ -241,7 +245,7 @@ Message offset map:
 <table>
   <tbody>
     <tr>
-      <td colspan="3></td><td colspan="3">White Face</td><td colspan="6"></td>
+      <td colspan="3"></td><td colspan="3">White Face</td><td colspan="6"></td>
     </tr>
     <tr>
       <td colspan="3"></td>
@@ -259,7 +263,9 @@ Message offset map:
       <td colspan="6"></td>
     </tr>
     <tr>
-      <td colspan="3>Green Face</td><td colspan="3">Red Face</td><td colspan="3">Blue Face</td><td colspan="3">Orange Face</td>
+      <td colspan="3">Green Face</td><td colspan="3">Red Face</td><td colspan="3">Blue Face</td><td colspan="3">Orange Face</td>
+    </tr>
+    <tr>
       <td>Y</td><td>Y</td><td>O</td>
       <td>Y</td><td>Y</td><td>B</td>
       <td>W</td><td>O</td><td>B</td>
@@ -278,7 +284,9 @@ Message offset map:
       <td>W</td><td>W</td><td>G</td>
     </tr>
     <tr>
-      <td colspan="3></td><td colspan="3">Yellow Face</td><td colspan="6"></td>
+      <td colspan="3"></td><td colspan="3">Yellow Face</td><td colspan="6"></td>
+    </tr>
+    <tr>
       <td colspan="3"></td>
       <td>G</td><td>R</td><td>Y</td>
       <td colspan="6"></td>
