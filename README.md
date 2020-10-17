@@ -177,52 +177,57 @@ Message offset map:
 <table>
   <tbody>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="white">19</td><td bgcolor="white">20</td><td bgcolor="white">21</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3></td><td colspan="3">White Face</td><td colspan="6"></td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="white">26</td><td bgcolor="white">18</td><td bgcolor="white">22</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3"></td>
+      <td>19</td><td>20</td><td>21</td>
+      <td colspan="6"></td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="white">25</td><td bgcolor="white">24</td><td bgcolor="white">23</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3"></td>
+      <td>26</td><td>18</td><td>22</td>
+      <td colspan="6"></td>
     </tr>
     <tr>
-      <td bgcolor="lightgreen">10</td><td bgcolor="lightgreen">11</td><td bgcolor="lightgreen">12</td>
-      <td bgcolor="red">37</td><td bgcolor="red">38</td><td bgcolor="red">39</td>
-      <td bgcolor="lightblue">1</td><td bgcolor="lightblue">2</td><td bgcolor="lightblue">3</td>
-      <td bgcolor="orange">46</td><td bgcolor="orange">47</td><td bgcolor="orange">48</td>
+      <td colspan="3"></td>
+      <td>25</td><td>24</td><td>23</td>
+      <td colspan="6"></td>
     </tr>
     <tr>
-      <td bgcolor="lightgreen">17</td><td bgcolor="lightgreen">9</td><td bgcolor="lightgreen">13</td>
-      <td bgcolor="red">44</td><td bgcolor="red">36</td><td bgcolor="red">40</td>
-      <td bgcolor="lightblue">8</td><td bgcolor="lightblue">0</td><td bgcolor="lightblue">4</td>
-      <td bgcolor="orange">53</td><td bgcolor="orange">45</td><td bgcolor="orange">49</td>
+      <td colspan="3>Green Face</td><td colspan="3">Red Face</td><td colspan="3">Blue Face</td><td colspan="3">Orange Face</td>
+      <td>10</td><td>11</td><td>12</td>
+      <td>37</td><td>38</td><td>39</td>
+      <td>1</td><td>2</td><td>3</td>
+      <td>46</td><td>47</td><td>48</td>
     </tr>
     <tr>
-      <td bgcolor="lightgreen">16</td><td bgcolor="lightgreen">15</td><td bgcolor="lightgreen">14</td>
-      <td bgcolor="red">43</td><td bgcolor="red">42</td><td bgcolor="red">41</td>
-      <td bgcolor="lightblue">7</td><td bgcolor="lightblue">6</td><td bgcolor="lightblue">5</td>
-      <td bgcolor="orange">52</td><td bgcolor="orange">51</td><td bgcolor="orange">50</td>
+      <td>17</td><td>9</td><td>13</td>
+      <td>44</td><td>36</td><td>40</td>
+      <td>8</td><td>0</td><td>4</td>
+      <td>53</td><td>45</td><td>49</td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="yellow">28</td><td bgcolor="yellow">29</td><td bgcolor="yellow">30</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td>16</td><td>15</td><td>14</td>
+      <td>43</td><td>42</td><td>41</td>
+      <td>7</td><td>6</td><td>5</td>
+      <td>52</td><td>51</td><td>50</td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="yellow">35</td><td bgcolor="yellow">27</td><td bgcolor="yellow">31</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3></td><td colspan="3">Yellow Face</td><td colspan="6"></td>
+      <td colspan="3"></td>
+      <td>28</td><td>29</td><td>30</td>
+      <td colspan="6"></td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="yellow">34</td><td bgcolor="yellow">33</td><td bgcolor="yellow">32</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3"></td>
+      <td>35</td><td>27</td><td>31</td>
+      <td colspan="6"></td>
+    </tr>
+    <tr>
+      <td colspan="3"></td>
+      <td>34</td><td>33</td><td>32</td>
+      <td colspan="6"></td>
     </tr>
   </tbody>
 </table>
@@ -236,52 +241,57 @@ Message offset map:
 <table>
   <tbody>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="red">19</td><td bgcolor="white">20</td><td bgcolor="yellow">21</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3></td><td colspan="3">White Face</td><td colspan="6"></td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="lightgreen">26</td><td bgcolor="white">18</td><td bgcolor="white">22</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3"></td>
+      <td>R</td><td>W</td><td>Y</td>
+      <td colspan="6"></td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="lightgreen">25</td><td bgcolor="red">24</td><td bgcolor="red">23</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3"></td>
+      <td>G</td><td>W</td><td>W</td>
+      <td colspan="6"></td>
     </tr>
     <tr>
-      <td bgcolor="yellow">10</td><td bgcolor="yellow">11</td><td bgcolor="orange">12</td>
-      <td bgcolor="yellow">37</td><td bgcolor="yellow">38</td><td bgcolor="lightblue">39</td>
-      <td bgcolor="white">1</td><td bgcolor="orange">2</td><td bgcolor="lightblue">3</td>
-      <td bgcolor="red">46</td><td bgcolor="lightblue">47</td><td bgcolor="lightgreen">48</td>
+      <td colspan="3"></td>
+      <td>G</td><td>R</td><td>R</td>
+      <td colspan="6"></td>
     </tr>
     <tr>
-      <td bgcolor="lightblue">17</td><td bgcolor="lightgreen">9</td><td bgcolor="red">13</td>
-      <td bgcolor="white">44</td><td bgcolor="red">36</td><td bgcolor="lightblue">40</td>
-      <td bgcolor="orange">8</td><td bgcolor="lightblue">0</td><td bgcolor="red">4</td>
-      <td bgcolor="lightblue">53</td><td bgcolor="orange">45</td><td bgcolor="yellow">49</td>
+      <td colspan="3>Green Face</td><td colspan="3">Red Face</td><td colspan="3">Blue Face</td><td colspan="3">Orange Face</td>
+      <td>Y</td><td>Y</td><td>O</td>
+      <td>Y</td><td>Y</td><td>B</td>
+      <td>W</td><td>O</td><td>B</td>
+      <td>R</td><td>B</td><td>G</td>
     </tr>
     <tr>
-      <td bgcolor="orange">16</td><td bgcolor="orange">15</td><td bgcolor="white">14</td>
-      <td bgcolor="red">43</td><td bgcolor="lightgreen">42</td><td bgcolor="lightblue">41</td>
-      <td bgcolor="orange">7</td><td bgcolor="orange">6</td><td bgcolor="lightblue">5</td>
-      <td bgcolor="white">52</td><td bgcolor="white">51</td><td bgcolor="lightgreen">50</td>
+      <td>B</td><td>G</td><td>R</td>
+      <td>W</td><td>R</td><td>B</td>
+      <td>R</td><td>B</td><td>R</td>
+      <td>B</td><td>O</td><td>Y</td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="yellow">28</td><td bgcolor="lightgreen">29</td><td bgcolor="orange">30</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td>O</td><td>O</td><td>W</td>
+      <td>R</td><td>G</td><td>B</td>
+      <td>O</td><td>O</td><td>B</td>
+      <td>W</td><td>W</td><td>G</td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="red">35</td><td bgcolor="yellow">27</td><td bgcolor="lightgreen">31</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3></td><td colspan="3">Yellow Face</td><td colspan="6"></td>
+      <td colspan="3"></td>
+      <td>G</td><td>R</td><td>Y</td>
+      <td colspan="6"></td>
     </tr>
     <tr>
-      <td colspan="3" bgcolor="lightgrey"></td>
-      <td bgcolor="lightgreen">34</td><td bgcolor="yellow">33</td><td bgcolor="white">32</td>
-      <td colspan="6" bgcolor="lightgrey"></td>
+      <td colspan="3"></td>
+      <td>Y</td><td>Y</td><td>G</td>
+      <td colspan="6"></td>
+    </tr>
+    <tr>
+      <td colspan="3"></td>
+      <td>W</td><td>G</td><td>O</td>
+      <td colspan="6"></td>
     </tr>
   </tbody>
 </table>
