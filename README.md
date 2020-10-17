@@ -1,10 +1,26 @@
 # GoCube BLE Protocol Documentation
 GoCube is a bluetooth enabled Rubik's cube. This document contains a partial description of the GoCube BLE protocol.
 
-This document describes the general format of the notifications sent from the cube and the specifics for a subset of these notifications.
+# Overview
+Setup communication:
+- Scan for BLE devices that supports the Primary Service
+- Connect to the primary service
+- Enable notifications for the TX characteristic service
 
-**TODO:**
-- Figure out how to turn on the backlight of the cube
+The cube now starts sending the following notifications:
+- 3D tracking: 15 notifications per second (MsgOrientation). These notifications can be disabled and enabled
+- Rotations: one message every time a face is rotated (MsgRotation)
+
+The following information can be requested:
+- Current battery level (GetBattery)
+- Current state (GetState)
+- Offline stats (GetStats)
+- Cube type (GetCubeType)
+
+Additional commands:
+- Reboot
+- Toggle backlight
+- Calibrate 3D tracking
 
 # GATT Services
 | Service             | Properties | UUID |
@@ -16,49 +32,47 @@ This document describes the general format of the notifications sent from the cu
 # Commands
 This section lists the requests supported by the RX Characterstic service.
 
-## Messages
-Enable notifications for the TX Characterstics service to receive messages.
+## Request messages
+Enable or disable MsgOrientation (3D tracking):
 
-By default, the cube will send 15 MsgRotation notifications per second. Use the following commands to enable or disable these messages:
+| Value | Command            |
+| ----- | ------------------ |
+| 0x37  | DisableOrientation |
+| 0x38  | EnableOrientation  |
 
-| Value | Command         |
-| ----- | --------------- |
-| 0x37  | DisableRotation |
-| 0x38  | EnableRotation  |
-
-Use the following commands to request additional information from the cube:
+Request additional information from the cube:
 
 | Value | Command         | Message Type |
 | ----- | --------------- | -----------  |
 | 0x32  | GetBattery      | MsgBattery   |
 | 0x33  | GetState        | MsgState     |
-| 0x35  | GetState        | MsgState     |
 | 0x39  | GetStats        | MsgStats     |
 | 0x56  | GetCubeType     | MsgCubeType  |
 
 ## Configuration
 
-| Value | Command            | Description |
-| ----- | ------------------ | ----------- |
-| 0x34  | Reboot             | Reboot the cube |
-| 0x41  | LedFlash           | Flash the lights three times |
-| 0x42  | LedToogleAnimation | Enable or disable animated lights |
-| 0x43  | LedFlashSlow       | Slowly flashes the lights three times |
-| 0x44  | LedToggle          | Toggle lights |
-| 0x57  | CalibrateRotation  | |
+| Value | Command              | Description |
+| ----- | -------------------- | ----------- |
+| 0x34  | Reboot               | Reboot the cube |
+| 0x35  | SetSolvedState       | Resets the cube to solved state |
+| 0x41  | LedFlash             | Flash the backlight three times |
+| 0x42  | LedToogleAnimation   | Enable or disable animated backlight |
+| 0x43  | LedFlashSlow         | Slowly flashes the backlight three times |
+| 0x44  | LedToggle            | Toggle backlight |
+| 0x57  | CalibrateOrientation | Calibrate 3D tracking |
 
 # Notifications
 This section describes the format of the notification characteristic value.
 
 ## Common Message Format
-| Byte Offset | Length (Bytes) | Format  | Name     | Description |
-| ----------- | -------------- | ------- | -------- | ----------- |
-| 0           | 1              | Uint8   | Prefix   | Fixed value: 0x2A (*) | 
-| 1           | 1              | Uint8   | Length   | Length excluding Suffix |
-| 2           | 1              | Uint8   | Type     | Message Type |
-| 3           | Length-4       | Uint8[] | Message  | Message |
-| Length-1    | 1              | Uint8   | Checksum | Sum of byte 0 .. (Length-2) % 256 |
-| Length      | 2              | Uint8[] | Suffix   | Fixed value: [0x0D, 0x0A] (CRLF) |
+| Byte Offset | Length (Bytes) | Name     | Description |
+| ----------- | -------------- | -------- | ----------- |
+| 0           | 1              | Prefix   | Fixed value: 0x2A (*) | 
+| 1           | 1              | Length   | Length excluding Suffix |
+| 2           | 1              | Type     | Message Type |
+| 3           | Length-4       | Message  | Message |
+| Length-1    | 1              | Checksum | Sum of byte 0 .. (Length-2) % 256 |
+| Length      | 2              | Suffix   | Fixed value: [0x0D, 0x0A] (CRLF) |
 
 > **Example:**
 > | Byte Offset | Value | Description |
@@ -82,12 +96,12 @@ This section describes the format of the notification characteristic value.
 | 0x08 | MsgCubeType |
 
 ## Message Type 0x01: MsgRotation
-**Message Length:** 2 bytes
+**Message Length:** 2 bytes (Length - 4)
 
-| Byte Offset | Length (Bytes) | Format  | Name          | Description |
-| ----------- | -------------- | ------- | ------------- | ----------- |
-| 0           | 1              | Uint8   | FaceRotation  | Face and rotation |
-| 1           | 1              | Uint8   | Orientation   | Center piece orientation |
+| Byte Offset | Length (Bytes) | Name          | Description |
+| ----------- | -------------- | ------------- | ----------- |
+| 0           | 1              | FaceRotation  | Face and rotation |
+| 1           | 1              | Orientation   | Center piece orientation |
 
 | FaceRotation | Binary Value  | Color   | Rotation |
 | ------------ | ------------  | -----   | -------- |
@@ -130,12 +144,154 @@ This section describes the format of the notification characteristic value.
 > | B'       | 0x01         | 0x03        | Blue face counterclockwise rotation, center piece orientation three o'clock |
 > | D'       | 0x05         | 0x09        | Yellow face counterclockwise rotation, center piece orientation nine o'clock |
 
-## Message Type 0x05: MsgBattery
-**Message Length:** 1 byte
+## Message Type 0x02: MsgState
+**Message Length:** 60 bytes (Length - 4)
 
-| Byte Offset | Length (Bytes) | Format  | Name         | Description |
-| ----------- | -------------- | ------- | ------------ | ----------- |
-| 0           | 1              | Uint8   | BatteryLevel | <p>Current battery level percentage<br>Range: 0x00 - 0x64 (0 - 100)</p> |
+| Byte Offset | Length (Bytes) | Name          | Description |
+| ----------- | -------------- | ------------- | ----------- |
+| 0           | 1              | BlueCenter    | Constant value: 0x00 (blue) |
+| 1           | 8              | BlueFace      | The colors visable on the blue face, starting top left going clockwise |
+| 9           | 1              | GreenCenter   | Constant value: 0x01 (green) |
+| 10          | 8              | GreenFace     | The colors visable on the green face, starting top left going clockwise |
+| 18          | 1              | WhiteCenter   | Constant value: 0x02 (white) |
+| 19          | 8              | WhiteFace     | The colors visable on the white face, starting top left going clockwise |
+| 27          | 1              | YellowCenter  | Constant value: 0x03 (yellow) |
+| 28          | 8              | YellowFace    | The colors visable on the yellow face, starting top left going clockwise |
+| 36          | 1              | RedCenter     | Constant value: 0x04 (red) |
+| 37          | 8              | RedFace       | The colors visable on the red face, starting top left going clockwise |
+| 45          | 1              | OrangeCenter  | Constant value: 0x05 (orange) |
+| 46          | 8              | OrangeFace    | The colors visable on the orange face, starting top left going clockwise |
+| 54          | 6              | Orientation   | Orientation for each center piece: 0, 3, 6 or 9 o'clock |
+
+| Value | Color |
+| ----- | ----- |
+| 0x00  | Blue |
+| 0x01  | Green |
+| 0x02  | White |
+| 0x03  | Yellow |
+| 0x04  | Red |
+| 0x05  | Orange |
+
+Message offset map:
+
+<table>
+  <tbody>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="white">19</td><td bgcolor="white">20</td><td bgcolor="white">21</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="white">26</td><td bgcolor="white">18</td><td bgcolor="white">22</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="white">25</td><td bgcolor="white">24</td><td bgcolor="white">23</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td bgcolor="lightgreen">10</td><td bgcolor="lightgreen">11</td><td bgcolor="lightgreen">12</td>
+      <td bgcolor="red">37</td><td bgcolor="red">38</td><td bgcolor="red">39</td>
+      <td bgcolor="lightblue">1</td><td bgcolor="lightblue">2</td><td bgcolor="lightblue">3</td>
+      <td bgcolor="orange">46</td><td bgcolor="orange">47</td><td bgcolor="orange">48</td>
+    </tr>
+    <tr>
+      <td bgcolor="lightgreen">17</td><td bgcolor="lightgreen">9</td><td bgcolor="lightgreen">13</td>
+      <td bgcolor="red">44</td><td bgcolor="red">36</td><td bgcolor="red">40</td>
+      <td bgcolor="lightblue">8</td><td bgcolor="lightblue">0</td><td bgcolor="lightblue">4</td>
+      <td bgcolor="orange">53</td><td bgcolor="orange">45</td><td bgcolor="orange">49</td>
+    </tr>
+    <tr>
+      <td bgcolor="lightgreen">16</td><td bgcolor="lightgreen">15</td><td bgcolor="lightgreen">14</td>
+      <td bgcolor="red">43</td><td bgcolor="red">42</td><td bgcolor="red">41</td>
+      <td bgcolor="lightblue">7</td><td bgcolor="lightblue">6</td><td bgcolor="lightblue">5</td>
+      <td bgcolor="orange">52</td><td bgcolor="orange">51</td><td bgcolor="orange">50</td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="yellow">28</td><td bgcolor="yellow">29</td><td bgcolor="yellow">30</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="yellow">35</td><td bgcolor="yellow">27</td><td bgcolor="yellow">31</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="yellow">34</td><td bgcolor="yellow">33</td><td bgcolor="yellow">32</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+  </tbody>
+</table>
+
+** Example message, hex values:**
+
+| BlueCenter + BlueFace      | GreenCenter + GreenFace    | WhiteCenter + WhiteFace    | YellowCenter + YellowFace  | RedCenter + RedFace        | OrangeCenter + OrangeFace  | Orientation       |
+| -------------------------- | -------------------------- | -------------------------- | -------------------------- | -------------------------- | -------------------------- | ----------------- |
+| 00-02-05-00-04-00-05-05-05 | 01-03-03-05-04-02-05-05-00 | 02-04-02-03-02-04-04-01-01 | 03-01-04-03-01-05-01-02-03 | 04-03-03-00-00-00-01-04-02 | 05-04-00-01-03-01-02-02-00 | 03-00-03-03-06-00 |
+
+<table>
+  <tbody>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="red">19</td><td bgcolor="white">20</td><td bgcolor="yellow">21</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="lightgreen">26</td><td bgcolor="white">18</td><td bgcolor="white">22</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="lightgreen">25</td><td bgcolor="red">24</td><td bgcolor="red">23</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td bgcolor="yellow">10</td><td bgcolor="yellow">11</td><td bgcolor="orange">12</td>
+      <td bgcolor="yellow">37</td><td bgcolor="yellow">38</td><td bgcolor="lightblue">39</td>
+      <td bgcolor="white">1</td><td bgcolor="orange">2</td><td bgcolor="lightblue">3</td>
+      <td bgcolor="red">46</td><td bgcolor="lightblue">47</td><td bgcolor="lightgreen">48</td>
+    </tr>
+    <tr>
+      <td bgcolor="lightblue">17</td><td bgcolor="lightgreen">9</td><td bgcolor="red">13</td>
+      <td bgcolor="white">44</td><td bgcolor="red">36</td><td bgcolor="lightblue">40</td>
+      <td bgcolor="orange">8</td><td bgcolor="lightblue">0</td><td bgcolor="red">4</td>
+      <td bgcolor="lightblue">53</td><td bgcolor="orange">45</td><td bgcolor="yellow">49</td>
+    </tr>
+    <tr>
+      <td bgcolor="orange">16</td><td bgcolor="orange">15</td><td bgcolor="white">14</td>
+      <td bgcolor="red">43</td><td bgcolor="lightgreen">42</td><td bgcolor="lightblue">41</td>
+      <td bgcolor="orange">7</td><td bgcolor="orange">6</td><td bgcolor="lightblue">5</td>
+      <td bgcolor="white">52</td><td bgcolor="white">51</td><td bgcolor="lightgreen">50</td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="yellow">28</td><td bgcolor="lightgreen">29</td><td bgcolor="orange">30</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="red">35</td><td bgcolor="yellow">27</td><td bgcolor="lightgreen">31</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+    <tr>
+      <td colspan="3" bgcolor="lightgrey"></td>
+      <td bgcolor="lightgreen">34</td><td bgcolor="yellow">33</td><td bgcolor="white">32</td>
+      <td colspan="6" bgcolor="lightgrey"></td>
+    </tr>
+  </tbody>
+</table>
+
+## Message Type 0x05: MsgBattery
+**Message Length:** 1 byte (Length - 4)
+
+| Byte Offset | Length (Bytes) | Name         | Description |
+| ----------- | -------------- | ------------ | ----------- |
+| 0           | 1              | BatteryLevel | <p>Current battery level percentage<br>Range: 0x00 - 0x64 (0 - 100)</p> |
 
 > **Example:**
 > | Byte Offset | Value | Description |
