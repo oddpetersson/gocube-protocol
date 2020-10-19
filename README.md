@@ -8,7 +8,7 @@ Setup communication:
 - Enable notifications for the TX characteristic service
 
 The following notifications are sent without requests:
-- 3D tracking: 15 notifications per second (MsgOrientation). These notifications can be disabled and enabled
+- 3D tracking: 15 notifications per second (MsgOrientation). These notifications can be disabled or enabled
 - Rotations: one message each time a face is rotated (MsgRotation)
 
 The following notifications can be requested:
@@ -31,7 +31,7 @@ Additional requests:
 | TX Characterstic    | N          | 6e400003-b5a3-f393-e0a9-e50e24dcca9e |
 
 # Requests
-This section lists the requests supported by the RX Characterstic service.
+Requests supported by the RX Characterstic service.
 
 ## Request messages
 Enable or disable MsgOrientation (3D tracking):
@@ -63,7 +63,7 @@ Request additional information from the cube:
 | 0x57  | CalibrateOrientation | Calibrate 3D tracking |
 
 # Notifications
-This section describes the format of the notification characteristic value.
+This section describes the format of the notifications.
 
 ## Common Message Format
 | Byte Offset | Length (Bytes) | Name     | Description |
@@ -72,7 +72,7 @@ This section describes the format of the notification characteristic value.
 | 1           | 1              | Length   | Length excluding Suffix |
 | 2           | 1              | Type     | Message Type |
 | 3           | Length-4       | Message  | Message |
-| Length-1    | 1              | Checksum | Sum of byte 0 .. (Length-2) % 256 |
+| Length-1    | 1              | Checksum | Sum of byte 0 .. (Length-2) % 0x100 |
 | Length      | 2              | Suffix   | Fixed value: [0x0D, 0x0A] (CRLF) |
 
 > **Example:**
@@ -82,7 +82,7 @@ This section describes the format of the notification characteristic value.
 > | 1           | 0x05  | Length: 5 bytes |
 > | 2           | 0x05  | Message Type: MsgBattery |
 > | 3           | 0x38  | Message: Battery level: 56% |
-> | 4           | 0x6C  | Checksum: (0x2A + 0x05 + 0x05 + 0x38) % 256 |
+> | 4           | 0x6C  | Checksum: (0x2A + 0x05 + 0x05 + 0x38) % 0x100 |
 > | 5           | 0x0D  | Suffix: CR |
 > | 6           | 0x0A  | Suffix: LF |
 
@@ -333,7 +333,7 @@ Format: x#y#z#w
 > | 1           | 0x05  | Length: 5 bytes |
 > | 2           | 0x05  | Message Type: MsgBattery |
 > | 3           | 0x38  | Message: Battery level: 56% |
-> | 4           | 0x6C  | Checksum: (0x2A + 0x05 + 0x05 + 0x38) % 256 |
+> | 4           | 0x6C  | Checksum: (0x2A + 0x05 + 0x05 + 0x38) % 0x100 |
 > | 5           | 0x0D  | Suffix: CR |
 > | 6           | 0x0A  | Suffix: LF |
 
@@ -356,6 +356,6 @@ Format: moves#time#solves
 > | 1           | 0x05  | Length: 5 bytes |
 > | 2           | 0x08  | Message Type: MsgCubeType |
 > | 3           | 0x01  | Message: Edge cube |
-> | 4           | 0x38  | Checksum: (0x2A + 0x05 + 0x08 + 0x01) % 256 |
+> | 4           | 0x38  | Checksum: (0x2A + 0x05 + 0x08 + 0x01) % 0x100 |
 > | 5           | 0x0D  | Suffix: CR |
 > | 6           | 0x0A  | Suffix: LF |
