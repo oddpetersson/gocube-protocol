@@ -7,20 +7,21 @@ Setup communication:
 - Connect to the primary service
 - Enable notifications for the TX characteristic service
 
-The cube now starts sending the following notifications:
+The following notifications are sent without requests:
 - 3D tracking: 15 notifications per second (MsgOrientation). These notifications can be disabled and enabled
-- Rotations: one message every time a face is rotated (MsgRotation)
+- Rotations: one message each time a face is rotated (MsgRotation)
 
-The following information can be requested:
-- Current battery level (GetBattery)
-- Current state (GetState)
-- Offline stats (GetStats)
-- Cube type (GetCubeType)
+The following notifications can be requested:
+- Current battery level (MsgBattery)
+- Current state (MsgState)
+- Offline stats (MsgStats)
+- Cube type (MsgCubeType)
 
-Additional commands:
+Additional requests:
 - Reboot
 - Toggle backlight
 - Calibrate 3D tracking
+- Reset cube to solved state
 
 # GATT Services
 | Service             | Properties | UUID |
@@ -29,7 +30,7 @@ Additional commands:
 | RX Characterstic    | W, WNR     | 6e400002-b5a3-f393-e0a9-e50e24dcca9e |
 | TX Characterstic    | N          | 6e400003-b5a3-f393-e0a9-e50e24dcca9e |
 
-# Commands
+# Requests
 This section lists the requests supported by the RX Characterstic service.
 
 ## Request messages
@@ -96,12 +97,12 @@ This section describes the format of the notification characteristic value.
 | 0x08 | MsgCubeType |
 
 ## Message Type 0x01: MsgRotation
-**Message Length:** 2 bytes (Length - 4)
+**Message Length:** n * 2 bytes (Length - 4) (n = number of rotations)
 
-| Byte Offset | Length (Bytes) | Name          | Description |
-| ----------- | -------------- | ------------- | ----------- |
-| 0           | 1              | FaceRotation  | Face and rotation |
-| 1           | 1              | Orientation   | Center piece orientation |
+| Message Offset | Length (Bytes) | Name          | Description |
+| -------------- | -------------- | ------------- | ----------- |
+| n              | 1              | FaceRotation  | Face and rotation |
+| n + 1          | 1              | Orientation   | Center piece orientation |
 
 | FaceRotation | Binary Value  | Color   | Rotation |
 | ------------ | ------------  | -----   | -------- |
@@ -147,21 +148,21 @@ This section describes the format of the notification characteristic value.
 ## Message Type 0x02: MsgState
 **Message Length:** 60 bytes (Length - 4)
 
-| Byte Offset | Length (Bytes) | Name          | Description |
-| ----------- | -------------- | ------------- | ----------- |
-| 0           | 1              | BlueCenter    | Constant value: 0x00 (blue) |
-| 1           | 8              | BlueFace      | The colors visable on the blue face, starting top left going clockwise |
-| 9           | 1              | GreenCenter   | Constant value: 0x01 (green) |
-| 10          | 8              | GreenFace     | The colors visable on the green face, starting top left going clockwise |
-| 18          | 1              | WhiteCenter   | Constant value: 0x02 (white) |
-| 19          | 8              | WhiteFace     | The colors visable on the white face, starting top left going clockwise |
-| 27          | 1              | YellowCenter  | Constant value: 0x03 (yellow) |
-| 28          | 8              | YellowFace    | The colors visable on the yellow face, starting top left going clockwise |
-| 36          | 1              | RedCenter     | Constant value: 0x04 (red) |
-| 37          | 8              | RedFace       | The colors visable on the red face, starting top left going clockwise |
-| 45          | 1              | OrangeCenter  | Constant value: 0x05 (orange) |
-| 46          | 8              | OrangeFace    | The colors visable on the orange face, starting top left going clockwise |
-| 54          | 6              | Orientation   | Orientation for each center piece: 0, 3, 6 or 9 o'clock |
+| Message Offset | Length (Bytes) | Name          | Description |
+| -------------- | -------------- | ------------- | ----------- |
+| 0              | 1              | BlueCenter    | Constant value: 0x00 (blue) |
+| 1              | 8              | BlueFace      | The colors visable on the blue face, starting top left going clockwise |
+| 9              | 1              | GreenCenter   | Constant value: 0x01 (green) |
+| 10             | 8              | GreenFace     | The colors visable on the green face, starting top left going clockwise |
+| 18             | 1              | WhiteCenter   | Constant value: 0x02 (white) |
+| 19             | 8              | WhiteFace     | The colors visable on the white face, starting top left going clockwise |
+| 27             | 1              | YellowCenter  | Constant value: 0x03 (yellow) |
+| 28             | 8              | YellowFace    | The colors visable on the yellow face, starting top left going clockwise |
+| 36             | 1              | RedCenter     | Constant value: 0x04 (red) |
+| 37             | 8              | RedFace       | The colors visable on the red face, starting top left going clockwise |
+| 45             | 1              | OrangeCenter  | Constant value: 0x05 (orange) |
+| 46             | 8              | OrangeFace    | The colors visable on the orange face, starting top left going clockwise |
+| 54             | 6              | Orientation   | Orientation for each center piece: 0, 3, 6 or 9 o'clock |
 
 | Value | Color |
 | ----- | ----- |
@@ -304,12 +305,26 @@ Message offset map:
   </tbody>
 </table>
 
+## Message Type 0x03: MsgOrientation
+**Message Length:** variable
+
+Current orientation of the cube, reported as a quaternion. Numeric values represented as ascii strings. Used for 3D tracking.
+
+Format: x#y#z#w
+
+> **Example:**
+>
+> | x                   | delimeter | y              | delimeter | z                             | delimeter | w                   |
+> | ------------------- | --------- | -------------- | --------- | ----------------------------- | --------- | ------------------- |
+> | 0x39 0x31 0x37 0x35 | 0x23      | 0x33 0x34 0x36 | 0x23      | 0x2D 0x31 0x33 0x35 0x32 0x38 | 0x23      | 0x2D 0x34 0x35 0x39 |
+> | 9175                | #         | 346            | #         | -13528                        | #         | -459                |
+
 ## Message Type 0x05: MsgBattery
 **Message Length:** 1 byte (Length - 4)
 
-| Byte Offset | Length (Bytes) | Name         | Description |
-| ----------- | -------------- | ------------ | ----------- |
-| 0           | 1              | BatteryLevel | <p>Current battery level percentage<br>Range: 0x00 - 0x64 (0 - 100)</p> |
+| Message Offset | Length (Bytes) | Name         | Description |
+| -------------- | -------------- | ------------ | ----------- |
+| 0              | 1              | BatteryLevel | <p>Current battery level percentage<br>Range: 0x00 - 0x64 (0 - 100)</p> |
 
 > **Example:**
 > | Byte Offset | Value | Description |
@@ -319,5 +334,28 @@ Message offset map:
 > | 2           | 0x05  | Message Type: MsgBattery |
 > | 3           | 0x38  | Message: Battery level: 56% |
 > | 4           | 0x6C  | Checksum: (0x2A + 0x05 + 0x05 + 0x38) % 256 |
+> | 5           | 0x0D  | Suffix: CR |
+> | 6           | 0x0A  | Suffix: LF |
+
+## Message Type 0x07: MsgOffLineStats
+**Message Length:** variable (Length - 4)
+
+Format: moves#time#solves
+
+## Message Type 0x08: MsgCubeType
+**Message Length:** 1 byte (Length - 4)
+
+| Message Offset | Length (Bytes) | Name         | Description |
+| -------------- | -------------- | ------------ | ----------- |
+| 0              | 1              | CubeType     | <p>0x00: Non edge cube<br>0x01: Edge cube</p> |
+
+> **Example:**
+> | Byte Offset | Value | Description |
+> | ----------- | ----- | ----------- |
+> | 0           | 0x2A  | Prefix: asterisk (*) |
+> | 1           | 0x05  | Length: 5 bytes |
+> | 2           | 0x08  | Message Type: MsgCubeType |
+> | 3           | 0x01  | Message: Edge cube |
+> | 4           | 0x38  | Checksum: (0x2A + 0x05 + 0x08 + 0x01) % 256 |
 > | 5           | 0x0D  | Suffix: CR |
 > | 6           | 0x0A  | Suffix: LF |
