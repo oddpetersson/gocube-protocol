@@ -57,7 +57,7 @@ Request additional information from the cube:
 | 0x34  | Reboot               | Reboot the cube |
 | 0x35  | SetSolvedState       | Resets the cube to solved state |
 | 0x41  | LedFlash             | Flash the backlight three times |
-| 0x42  | LedToogleAnimation   | Enable or disable animated backlight |
+| 0x42  | LedToggleAnimation   | Enable or disable animated backlight |
 | 0x43  | LedFlashSlow         | Slowly flashes the backlight three times |
 | 0x44  | LedToggle            | Toggle backlight |
 | 0x57  | CalibrateOrientation | Calibrate 3D tracking |
